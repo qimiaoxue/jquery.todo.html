@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>todo</title>
+        <script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+        <script>
+            var log = function() {
+                console.log(arguments) 
+            } 
+            
+            var todoTemplate = function(todo){
+                var t = `
+                    <div class="id-todo-item">
+                        <span class="id-todo-task">${ todo }</span>
+                        <button class="id-todo-delete">delete</button>
+                        <button class="id-todo-update">update</button>
+                    </div>
+                `
+                return t
+            }
+
+            var todoAdd = function(){
+                $('.id-todo-button').on('click', function(){
+                    var todo = $('.id-todo-content').val()
+                    log('todo', todo)
+                    $('.id-todo-cell').append(todoTemplate(todo))
+                })
+            }
+
+            var todoDelete = function(){
+                $('.id-todo-cell').on('click', '.id-todo-delete', function(){
+                    var button = $(this)
+                    var item = button.closest('.id-todo-item')
+                    log('item', item)
+                    $(item).remove()
+                })
+            }
+
+            var todoUpdate = function(){
+                $('.id-todo-cell').on('click', '.id-todo-update', function(){
+                    var button = $(this) 
+                    var item = button.closest('.id-todo-item')
+                    var form = `
+                        <div class="id-todo-edit">
+                            <input class="id-update-content">
+                            <button class="id-update-button">define</button>
+                        </div>
+                    `
+                    item.append(form)
+                })
+            }
+
+            var editDefine = function(){
+                $('.id-todo-cell').on('click', '.id-update-button',
+                    function(){
+                    var button = $(this) 
+                    var item = button.closest('.id-todo-item')
+                    var todo = item.find('.id-todo-task')
+                    var todoUpdate = item.find('.id-update-content').val()
+                    $(todo).text(todoUpdate)
+                })
+            }
+
+            var editDelete = function(){
+                $('.id-todo-cell').on('click', '.id-update-button',
+                    function(){
+                    var button = $(this)
+                    var parent = button.parent()
+                    parent.remove()
+                })
+            }
+
+            var bindEvents = function(){
+                todoAdd()
+                todoDelete()
+                todoUpdate()
+                editDefine()
+                editDelete()
+            }
+
+            $(document).ready(function(){
+                bindEvents()
+            })
+        </script>
+    </head>
+    <body>
+        <div class="id-todo-container">
+            <div class="id-todo-head">
+                <h1>Todo</h1>
+                <input class="id-todo-content" placehode="add todo">
+                <button class="id-todo-button">Add</button>
+            </div>
+            <div class="id-todo-cell">
+            </div>
+        </div>
+    </body>
